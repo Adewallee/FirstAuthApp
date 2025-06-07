@@ -85,7 +85,11 @@ const makeAdmin = async (req, res) => {
         const { userId } = req.params; // Get user ID from request parameters
 
         // Find the user by ID and update their role to 'admin'
-        const updatedUser = await User.findByIdAndUpdate(userId, { role: 'admin' }, { new: true });
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { $set: {role: 'admin' } },
+            { new: true }
+        ).lean(); // Use lean() to return a plain JavaScript object instead of a Mongoose document
 
         if (!updatedUser) {
             return res.status(404).json({ message: 'User not found' });
